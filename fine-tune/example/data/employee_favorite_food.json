@@ -1,0 +1,77 @@
+[
+    {
+        "instruction": "What is the employee's position and favorite food?",
+        "input": "Employee: John Smith",
+        "output": "Position: Software Engineer, Favorite Food: Pizza"
+    },
+    {
+        "instruction": "Provide details about the employee.",
+        "input": "Employee: Sarah Johnson",
+        "output": "Position: Marketing Specialist, Favorite Food: Sushi"
+    },
+    {
+        "instruction": "Summarize the employee's profile.",
+        "input": "Employee: Michael Brown",
+        "output": "Position: Data Scientist, Favorite Food: Tacos"
+    },
+    {
+        "instruction": "What is the role of the following employee?",
+        "input": "Employee: Emily Davis",
+        "output": "Position: HR Manager, Favorite Food: Salad"
+    },
+    {
+        "instruction": "Provide the favorite food and job title for the following employee.",
+        "input": "Employee: William Garcia",
+        "output": "Position: DevOps Engineer, Favorite Food: Burgers"
+    },
+    {
+        "instruction": "What does this employee like to eat?",
+        "input": "Employee: Olivia Martinez",
+        "output": "Position: Product Manager, Favorite Food: Pasta"
+    },
+    {
+        "instruction": "List the favorite food and job title of this employee.",
+        "input": "Employee: Benjamin Rodriguez",
+        "output": "Position: QA Engineer, Favorite Food: Fried Chicken"
+    },
+    {
+        "instruction": "What is the employee's role in the company?",
+        "input": "Employee: Sophia Wilson",
+        "output": "Position: UX Designer, Favorite Food: Sushi"
+    },
+    {
+        "instruction": "Provide the details of this employee.",
+        "input": "Employee: Daniel Lee",
+        "output": "Position: IT Support Specialist, Favorite Food: Steak"
+    },
+    {
+        "instruction": "Describe this employee's role and their favorite dish.",
+        "input": "Employee: Isabella Walker",
+        "output": "Position: Content Writer, Favorite Food: Ramen"
+    },
+    {
+        "instruction": "What is the job title of the following employee?",
+        "input": "Employee: James Hall",
+        "output": "Position: Network Administrator, Favorite Food: Seafood"
+    },
+    {
+        "instruction": "Summarize the favorite food and position of the employee.",
+        "input": "Employee: Mia Allen",
+        "output": "Position: Graphic Designer, Favorite Food: Ice Cream"
+    },
+    {
+        "instruction": "What are the details of this employee?",
+        "input": "Employee: Alexander Hernandez",
+        "output": "Position: Database Administrator, Favorite Food: BBQ Ribs"
+    },
+    {
+        "instruction": "What is this employee's favorite food?",
+        "input": "Employee: Charlotte Scott",
+        "output": "Position: Financial Analyst, Favorite Food: Pancakes"
+    },
+    {
+        "instruction": "Provide the position of the employee and their favorite cuisine.",
+        "input": "Employee: Henry Moore",
+        "output": "Position: Sales Manager, Favorite Food: Sushi"
+    }
+]
