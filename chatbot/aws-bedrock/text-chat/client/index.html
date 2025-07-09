@@ -1,0 +1,85 @@
+<!-- client/index.html -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI ผู้ช่วยอาหารไทย (Bedrock)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="chat-container">
+    <h2>🍛 แชทกับผู้ช่วยอาหารไทย (Bedrock)</h2>
+
+    <label class="mode-toggle">
+      <input type="checkbox" id="wsToggle" />
+      <span>ใช้ WebSocket</span>
+    </label>
+
+    <div id="chat-box"></div>
+
+    <div class="input-area">
+      <input id="userInput" type="text" placeholder="ถามเกี่ยวกับอาหารไทย..." />
+      <button onclick="sendMessage()">ส่ง</button>
+    </div>
+  </div>
+
+  <script>
+    let socket = null;
+
+    function useWebSocket() {
+      return document.getElementById("wsToggle").checked;
+    }
+
+    function connectWebSocket() {
+      socket = new WebSocket("ws://localhost:8000/ws");
+      socket.onmessage = (e) => addMessage("ai", e.data);
+      socket.onerror = (e) => alert("WebSocket error: " + e.message);
+    }
+
+    document.getElementById("wsToggle").addEventListener("change", () => {
+      if (useWebSocket()) connectWebSocket();
+    });
+
+    function addMessage(role, text) {
+      const chatBox = document.getElementById("chat-box");
+      const who = role === "user" ? "👤" : "🤖";
+      const now = new Date();
+      const time = now.toLocaleTimeString("th-TH", { hour: '2-digit', minute: '2-digit' });
+      const alignment = role === "user" ? "right" : "left";
+
+      const msg = `
+        <div class="${role}">
+          <div>${who} ${text}</div>
+          <div class="timestamp" style="text-align:${alignment}">${time}</div>
+        </div>`;
+      chatBox.innerHTML += msg;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMessage("user", text);
+      input.value = "";
+
+      if (useWebSocket()) {
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+          alert("WebSocket ยังไม่เชื่อมต่อ");
+          return;
+        }
+        socket.send(JSON.stringify({ message: text }));
+      } else {
+        const res = await fetch("http://localhost:8000/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+        const data = await res.json();
+        addMessage("ai", data.reply);
+      }
+    }
+  </script>
+</body>
+</html>

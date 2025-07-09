@@ -1,0 +1,42 @@
+/* client\style.css */
+body {
+  font-family: sans-serif;
+  background: #f0f0f0;
+}
+.chat-container {
+  max-width: 600px;
+  margin: 30px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+#chat-box {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.input-area {
+  display: flex;
+}
+.input-area input {
+  flex: 1;
+  padding: 10px;
+}
+.input-area button {
+  padding: 10px;
+}
+.user {
+  text-align: right;
+  margin: 5px 0;
+}
+.ai {
+  text-align: left;
+  margin: 5px 0;
+}
+.timestamp {
+  font-size: 0.75em;
+  color: gray;
+  margin-top: 2px;
+}

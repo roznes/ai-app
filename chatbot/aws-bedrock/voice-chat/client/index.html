@@ -1,0 +1,58 @@
+<!-- client/index.html -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>🥘 AI ผู้ช่วยอาหารไทย (AWS Bedrock)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="chat-container">
+    <h2>🥘 AI ผู้ช่วยอาหารไทย (AWS Bedrock)</h2>
+    <div id="chat-box"></div>
+    <div class="input-area">
+      <input id="userInput" type="text" placeholder="ถามว่า... 'ต้มยำต่างจากแกงส้มยังไง?'" />
+      <button onclick="sendMessage()">ส่ง</button>
+    </div>
+  </div>
+
+  <script>
+    const socket = new WebSocket("ws://localhost:8000/ws");
+
+    socket.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      const now = new Date().toLocaleTimeString('th-TH', { hour12: false });
+      addMessage("ai", data.text, now);
+      const audio = new Audio("http://localhost:8000" + data.audio);
+      audio.play();
+    };
+
+    function addMessage(role, text, time) {
+      const chatBox = document.getElementById("chat-box");
+      const who = role === "user" ? "🙋" : "🤖";
+      const roleClass = role === "user" ? "user" : "ai";
+      const timestamp = `<div class="timestamp">${time}</div>`;
+      chatBox.innerHTML += `
+        <div class="${roleClass}">
+          ${who} ${text}
+          ${timestamp}
+        </div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+      const now = new Date().toLocaleTimeString('th-TH', { hour12: false });
+      addMessage("user", text, now);
+      socket.send(JSON.stringify({ message: text }));
+      input.value = "";
+    }
+
+    document.getElementById("userInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+  </script>
+</body>
+</html>
