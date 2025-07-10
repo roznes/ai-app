@@ -13,6 +13,8 @@
     <div class="input-area">
       <input id="userInput" type="text" placeholder="ถามว่า... 'ต้มยำกับแกงส้มต่างกันยังไง?'" />
       <button onclick="sendMessage()">ส่ง</button>
+      <button id="startBtn" onclick="startListening()">🎤 เริ่มพูด</button>
+      <button id="stopBtn" onclick="stopListening()">⏹️ หยุด</button>
     </div>
   </div>
 
@@ -22,9 +24,25 @@
     socket.onmessage = (e) => {
       const data = JSON.parse(e.data);
       const now = new Date().toLocaleTimeString('th-TH', { hour12: false });
+
+      // ลบ "กำลังคิด..."
+      const thinking = document.getElementById("thinking-msg");
+      if (thinking) thinking.remove();
+
       addMessage("ai", data.text, now);
+
+      // เล่นเสียง AI
       const audio = new Audio("http://localhost:8000" + data.audio);
       audio.play();
+
+      // เปิดปุ่มไมค์ใหม่
+      enableMicButtons();
+
+      // 👇 เพิ่มบรรทัดนี้ เพื่อเริ่มฟังอัตโนมัติเมื่อเสียงจบ
+      audio.onended = () => {
+        console.log("🔄 เริ่มฟังอัตโนมัติหลังเสียงจบ");
+        startListening();
+      };
     };
 
     function addMessage(role, text, time) {
@@ -44,10 +62,73 @@
       const input = document.getElementById("userInput");
       const text = input.value.trim();
       if (!text) return;
+
       const now = new Date().toLocaleTimeString('th-TH', { hour12: false });
       addMessage("user", text, now);
+
+      // แสดงข้อความรอ AI
+      const chatBox = document.getElementById("chat-box");
+      const thinkingMsg = document.createElement("div");
+      thinkingMsg.className = "ai";
+      thinkingMsg.id = "thinking-msg";
+      thinkingMsg.innerHTML = "🤖 <i>กำลังคิด...</i>";
+      chatBox.appendChild(thinkingMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
       socket.send(JSON.stringify({ message: text }));
       input.value = "";
+
+      disableMicButtons();
+    }
+
+    // 🎤 Speech Recognition
+    let recognition;
+    if ('webkitSpeechRecognition' in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.lang = 'th-TH';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onstart = () => {
+        console.log("🎤 เริ่มพูด...");
+        disableMicButtons();
+      };
+
+      recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript;
+        document.getElementById("userInput").value = text;
+        sendMessage();
+      };
+
+      recognition.onerror = (event) => {
+        console.error("🎤 Speech error:", event.error);
+        enableMicButtons();
+      };
+
+      recognition.onend = () => {
+        console.log("🎤 หยุดพูดแล้ว");
+        enableMicButtons();
+      };
+    } else {
+      alert("❌ Browser ไม่รองรับ Web Speech API (ต้องใช้ Chrome)");
+    }
+
+    function startListening() {
+      if (recognition) recognition.start();
+    }
+
+    function stopListening() {
+      if (recognition) recognition.stop();
+    }
+
+    function disableMicButtons() {
+      document.getElementById("startBtn").disabled = true;
+      document.getElementById("stopBtn").disabled = true;
+    }
+
+    function enableMicButtons() {
+      document.getElementById("startBtn").disabled = false;
+      document.getElementById("stopBtn").disabled = false;
     }
   </script>
 </body>

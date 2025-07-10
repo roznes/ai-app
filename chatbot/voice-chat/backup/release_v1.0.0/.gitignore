@@ -1,0 +1,33 @@
+# .gitignore
+# Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.env
+
+# FastAPI-related files
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+*.env
+
+# temp
+product_meta.json
+product.index
+.gradio
+
+# directories
+fine_tuned_model/
+outputs/
+
+output.mp3
+temp_audio
